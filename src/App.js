@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -42,12 +43,18 @@ class QuoteList extends Component {
     }
   }
 
+  getIEXUrl() {
+    const useSandbox = process.env.REACT_APP_USE_SANDBOX === 'true';
+    console.log("sandbox:%o  raw:%o", useSandbox, process.env.USE_SANDBOX);
+    return useSandbox ? 'https://sandbox.iexapis.com/v1' : 'https://cloud.iexapis.com/v1';
+  }
+
   getQuotes() {
     const API_TOKEN = process.env.REACT_APP_IEX_TOKEN;
-    const BASE_URL = "https://cloud.iexapis.com/v1";
+    let baseUrl = this.getIEXUrl();
     const symbols = this.state.symbols;
     let filters = ['symbol','latestPrice', 'change', 'changePercent', 'marketCap'];
-    let url = `${BASE_URL}/stock/market/batch?symbols=${symbols.join(',')}&types=quote&filter=${filters.join(',')}&token=${API_TOKEN}`;
+    let url = `${baseUrl}/stock/market/batch?symbols=${symbols.join(',')}&types=quote&filter=${filters.join(',')}&token=${API_TOKEN}`;
     console.log("url: %o ", url);
 
     fetch(url).then(response => response.json()).then(json => {
