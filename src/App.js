@@ -1,6 +1,10 @@
 
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import { Row  } from "react-bootstrap";
+//import { Col  } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
 function formatChange(value) {
@@ -25,10 +29,13 @@ function formatQuote(value) {
 function Quote(props) {
   console.log("Quote props:%o", props);
   return (
-    <div>
-      <div>{props.symbol} : {formatQuote(props.latestPrice)}  Chg: {formatChange(props.change)} :{formatChangePercent(props.changePercent)}</div>
-    </div>
-    );
+    <tr class="">
+      <td>{props.symbol}</td>
+      <td>{formatQuote(props.latestPrice)}</td>
+      <td>{formatChange(props.change)}</td>
+      <td>{formatChangePercent(props.changePercent)}</td>
+    </tr>
+  );
 }
 
 /* 
@@ -81,25 +88,39 @@ class QuoteList extends Component {
   render() {
     return (
       <div>
-        <h4>Quotes</h4>
-        <div>
-          {this.state.quotes.map((quote, index) => <Quote key={index} {...quote} />)}
-        </div>
+      <Container>
+          <Row>Quotes</Row>
+          <Row>
+            <table class="table table-dark table-bordered">
+              <thead>
+                <tr>
+                  <th>Symbol</th>
+                  <th>Price</th>
+                  <th>Change</th>
+                  <th>Change %</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.quotes.map(quote => <Quote {...quote} />)}
+              </tbody>
+            </table>
+          </Row>
+        </Container>
       </div>
     );
   }
 }
 
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
            IEX Demo
         </p>
         
-        <div><QuoteList symbols={['SPY','QQQ','AAPL','TSLA']} /></div>
+        <div><QuoteList symbols={['SPY','QQQ','AAPL','TSLA','F']} /></div>
       </header>
     </div>
   );
