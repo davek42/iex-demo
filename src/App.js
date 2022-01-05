@@ -50,19 +50,24 @@ class QuoteList extends Component {
     }
   }
 
-  getIEXUrl() {
+  getIEXBaseUrl() {
     const useSandbox = process.env.REACT_APP_USE_SANDBOX === 'true';
-    console.log("sandbox:%o  raw:%o", useSandbox, process.env.USE_SANDBOX);
+    console.log("sandbox:%o  raw:%o", useSandbox, process.env.REACT_APP_USE_SANDBOX);
     return useSandbox ? 'https://sandbox.iexapis.com/v1' : 'https://cloud.iexapis.com/v1';
   }
 
-  getQuotes() {
+  buildIEXUrl(symbols, filters) {
     const API_TOKEN = process.env.REACT_APP_IEX_TOKEN;
-    let baseUrl = this.getIEXUrl();
-    const symbols = this.state.symbols;
-    let filters = ['symbol','latestPrice', 'change', 'changePercent', 'marketCap'];
+    let baseUrl = this.getIEXBaseUrl();
     let url = `${baseUrl}/stock/market/batch?symbols=${symbols.join(',')}&types=quote&filter=${filters.join(',')}&token=${API_TOKEN}`;
     console.log("url: %o ", url);
+    return url;
+  }
+
+  getQuotes() {
+    const symbols = this.state.symbols;
+    let filters = ['symbol','latestPrice', 'change', 'changePercent', 'marketCap'];
+    let url = this.buildIEXUrl(symbols, filters);
 
     fetch(url).then(response => response.json()).then(json => {
       console.log("JSON:%o",json);
@@ -91,7 +96,7 @@ class QuoteList extends Component {
       <Container>
           <Row>Quotes</Row>
           <Row>
-            <table class="table table-dark table-bordered">
+            <table className="table table-dark table-bordered">
               <thead>
                 <tr>
                   <th>Symbol</th>
