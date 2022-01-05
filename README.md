@@ -2,7 +2,7 @@
 
 ---
 
-Simple demo os IEX Cloud data and Create React App
+Simple demo of IEX Cloud data and Create React App
 
 ## Deployed
 
